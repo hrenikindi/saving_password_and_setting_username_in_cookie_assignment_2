@@ -26,21 +26,27 @@ function clear() {
   localStorage.clear();
 }
 
-// a function to generate sha256 hash of the given string
+/**
+ * Generates SHA256 hash of a given string
+ * SHA-256 produces a 256-bit (32-byte) hash value, typically rendered as a hexadecimal number
+ * @param {string} message - The input string to hash
+ * @returns {Promise<string>} - Hexadecimal string representation of the hash
+ */
 async function sha256(message) {
-  // encode as UTF-8
+  // Step 1: Convert the message to UTF-8 encoded bytes
   const msgBuffer = new TextEncoder().encode(message);
 
-  // hash the message
+  // Step 2: Compute the hash using Web Crypto API
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
 
-  // convert ArrayBuffer to Array
+  // Step 3: Convert the hash from ArrayBuffer to regular Array
   const hashArray = Array.from(new Uint8Array(hashBuffer));
 
-  // convert bytes to hex string
+  // Step 4: Convert each byte to 2-digit hexadecimal string
   const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+    .map((b) => b.toString(16).padStart(2, '0'))  // Ensure each byte is 2 chars
+    .join('');  // Combine all hexadecimal strings
+  
   return hashHex;
 }
 
